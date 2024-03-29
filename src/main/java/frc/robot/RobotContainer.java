@@ -25,8 +25,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.SpikeController;
 import frc.robot.commands.FeedForwardCharacterization;
 import frc.robot.commands.SubsystemControl;
+import frc.robot.commands.note.AmpScore;
 import frc.robot.commands.note.ColorSensorIntake;
 import frc.robot.commands.note.Launch;
+import frc.robot.subsystems.amp.Amp;
 import frc.robot.subsystems.climber.Climb;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -51,6 +53,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Led led;
   private final Climb climber;
+  private final Amp amp;
 
   // Controller
   private static final double DEADBAND = 0.05;
@@ -109,6 +112,9 @@ public class RobotContainer {
     // Initalize climber
     climber = new Climb();
 
+    // Initialize amp
+    amp = new Amp();
+
     // Set up auto routines
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -137,25 +143,26 @@ public class RobotContainer {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-    /*SubsystemControl.fieldOrientedRotation(
-                drive,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () -> {
-                  Rotation2d rot =
-                      new Rotation2d(driverController.getRightX(), driverController.getRightY());
-                  double magnitude =
-                      Math.hypot(driverController.getRightX(), driverController.getRightY());
-
-                  if (magnitude > 0.5) {
-                    return (-rot.getDegrees() + 90) % 360;
-                  } else {
-                    return -1;
-                  }
-                },
-                () -> driverController.getLeftTriggerAxis(),
-                () -> driverController.getRightTriggerAxis()));
-    */
+    /*
+     * SubsystemControl.fieldOrientedRotation(
+     * drive,
+     * () -> -driverController.getLeftY(),
+     * () -> -driverController.getLeftX(),
+     * () -> {
+     * Rotation2d rot =
+     * new Rotation2d(driverController.getRightX(), driverController.getRightY());
+     * double magnitude =
+     * Math.hypot(driverController.getRightX(), driverController.getRightY());
+     *
+     * if (magnitude > 0.5) {
+     * return (-rot.getDegrees() + 90) % 360;
+     * } else {
+     * return -1;
+     * }
+     * },
+     * () -> driverController.getLeftTriggerAxis(),
+     * () -> driverController.getRightTriggerAxis()));
+     */
     /* Brake command */
     driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
@@ -189,6 +196,13 @@ public class RobotContainer {
     operatorController
         .rightBumper()
         .onTrue(Commands.runOnce(() -> new Launch(intake, launcher).schedule(), intake, launcher));
+
+    /* Amp scoring control */
+    operatorController
+        .leftBumper()
+        .onTrue(
+            Commands.runOnce(
+                () -> new AmpScore(intake, launcher, amp).schedule(), intake, launcher, amp));
   }
 
   /**
