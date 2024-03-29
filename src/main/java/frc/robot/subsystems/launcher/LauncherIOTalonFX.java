@@ -38,8 +38,8 @@ public class LauncherIOTalonFX implements LauncherIO {
     config.Slot0.kP = 0.3;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0.0;
-    config.Slot0.kV = 0.147;
-    config.Slot0.kS = 0.3;
+    config.Slot0.kV = 0.253;
+    config.Slot0.kS = 0.69;
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
