@@ -1,18 +1,18 @@
 package frc.robot.subsystems.amp;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Amp extends SubsystemBase {
-  private Solenoid wristSolenoid;
-  private Solenoid elbowSolenoid;
+  private DoubleSolenoid wristSolenoid;
+  private DoubleSolenoid elbowSolenoid;
   // private Compressor compressor;
 
   public Amp() {
     // compressor = new Compressor(20, PneumaticsModuleType.REVPH);
-    elbowSolenoid = new Solenoid(20, PneumaticsModuleType.REVPH, 7);
-    wristSolenoid = new Solenoid(20, PneumaticsModuleType.REVPH, 8);
+    wristSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 2, 3);
+    elbowSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 4, 5);
     // compressor.enableAnalog(110, 120);
   }
 
@@ -24,19 +24,19 @@ public class Amp extends SubsystemBase {
   }
 
   public void closeWrist() {
-    wristSolenoid.set(true);
+    wristSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
   public void openWrist() {
-    wristSolenoid.set(false);
+    wristSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void activateElbow() {
-    elbowSolenoid.set(true);
+    elbowSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
   public void deactivateElbow() {
-    elbowSolenoid.set(false);
+    elbowSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void reset() {

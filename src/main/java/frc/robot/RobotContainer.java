@@ -110,7 +110,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("colorSensorIntake", new ColorSensorIntake(intake, launcher));
 
     // Initalize climber
-    climber = new Climb();
 
     // Initialize amp
     amp = new Amp();

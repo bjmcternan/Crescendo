@@ -13,8 +13,8 @@ public class LauncherIOTalonFX implements LauncherIO {
   public final TalonFX motor;
 
   private final StatusSignal<Double> motorVelocity;
-  private final StatusSignal<Double> motorAppliedVolts;
-  private final StatusSignal<Double> motorCurrent;
+  // private final StatusSignal<Double> motorAppliedVolts;
+  // private final StatusSignal<Double> motorCurrent;
   private final StatusSignal<Double> setPointError;
   private final StatusSignal<Double> rollerPosition;
 
@@ -25,7 +25,7 @@ public class LauncherIOTalonFX implements LauncherIO {
   private static VelocityVoltage velocityVoltageCommand = new VelocityVoltage(0.0).withSlot(0);
 
   public LauncherIOTalonFX(int canId) {
-    this.motor = new TalonFX(canId, "rio");
+    this.motor = new TalonFX(canId);
     TalonFXConfiguration config = new TalonFXConfiguration();
 
     // Plastic gear config
@@ -39,8 +39,8 @@ public class LauncherIOTalonFX implements LauncherIO {
     config.Slot0.kP = 0.3;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0.0;
-    config.Slot0.kV = 0.147;
-    config.Slot0.kS = 0.3;
+    config.Slot0.kV = 0.253;
+    config.Slot0.kS = 0.69;
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -51,20 +51,18 @@ public class LauncherIOTalonFX implements LauncherIO {
     motor.setPosition(0.0);
 
     motorVelocity = motor.getVelocity();
-    motorAppliedVolts = motor.getMotorVoltage();
-    motorCurrent = motor.getStatorCurrent();
+    // motorAppliedVolts = motor.getMotorVoltage();
+    // motorCurrent = motor.getStatorCurrent();
     setPointError = motor.getClosedLoopError();
     rollerPosition = motor.getPosition();
 
-    BaseStatusSignal.setUpdateFrequencyForAll(
-        50, motorVelocity, motorAppliedVolts, motorCurrent, setPointError, rollerPosition);
+    BaseStatusSignal.setUpdateFrequencyForAll(50, motorVelocity, setPointError, rollerPosition);
     motor.optimizeBusUtilization();
   }
 
   @Override
   public void updateInputs(LauncherIOInputs inputs) {
-    BaseStatusSignal.refreshAll(
-        motorVelocity, motorAppliedVolts, motorCurrent, setPointError, rollerPosition);
+    BaseStatusSignal.refreshAll(motorVelocity, setPointError, rollerPosition);
 
     inputs.motorVelocityRotationsPerSec = motorVelocity.getValueAsDouble();
     inputs.mechanismVelocityRotationsPerSec = inputs.motorVelocityRotationsPerSec * gearRatio;
