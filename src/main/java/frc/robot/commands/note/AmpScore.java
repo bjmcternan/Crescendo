@@ -70,10 +70,10 @@ public class AmpScore extends Command {
       case FEED:
         intake.setVelocity(20.0);
         // if the note doesnt enter the launcher within 1 second then we end the command
-        if (positioningTime.hasElapsed(1.0)) {
-          complete = true;
-          break;
-        }
+        // if (positioningTime.hasElapsed(1.0)) {
+        //   complete = true;
+        //   break;
+        // }
 
         // wait for the note to enter the launcher
         if (launcher.getVelocityRPS() < LAUNCHER_STARTING_SPEED - 0.5) {
@@ -81,35 +81,36 @@ public class AmpScore extends Command {
           intake.disableIntake();
           startPosition = launcher.getPosition();
           positioningTime.restart();
+          launcher.disableLauncher();
         }
         break;
       case LOAD:
         launcher.setVelocity(LAUNCHER_POSITIONING_SPEED);
         // run the launcher until it has spun at least 1.5 rotations
-        if (launcher.getPosition() - startPosition > POS_ROTATIONS) {
-          state = State.GRAB;
-          positioningTime.restart();
+        if ((launcher.getPosition() - startPosition) > 0.7) {
           launcher.disableLauncher();
+          positioningTime.restart();
+          state = State.GRAB;
         }
         break;
       case GRAB:
         amp.closeWrist();
-        if (positioningTime.hasElapsed(0.5)) {
+        if (positioningTime.hasElapsed(5.0)) {
           state = State.POSITION;
           positioningTime.restart();
         }
         break;
       case POSITION:
-        launcher.setVelocity(LAUNCHER_POSITIONING_SPEED);
+        launcher.setVelocity(LAUNCHER_STARTING_SPEED);
         amp.activateElbow();
-        if (positioningTime.hasElapsed(0.1)) {
+        if (positioningTime.hasElapsed(1.0)) {
           state = State.SCORE;
           positioningTime.restart();
         }
         break;
       case SCORE:
         amp.openWrist();
-        if (positioningTime.hasElapsed(0.1)) {
+        if (positioningTime.hasElapsed(5.0)) {
           complete = true;
         }
         break;

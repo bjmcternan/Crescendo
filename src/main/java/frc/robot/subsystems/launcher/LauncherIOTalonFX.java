@@ -57,13 +57,14 @@ public class LauncherIOTalonFX implements LauncherIO {
     rollerPosition = motor.getPosition();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50, motorVelocity, motorAppliedVolts, motorCurrent, setPointError);
+        50, motorVelocity, motorAppliedVolts, motorCurrent, setPointError, rollerPosition);
     motor.optimizeBusUtilization();
   }
 
   @Override
   public void updateInputs(LauncherIOInputs inputs) {
-    BaseStatusSignal.refreshAll(motorVelocity, motorAppliedVolts, motorCurrent, setPointError);
+    BaseStatusSignal.refreshAll(
+        motorVelocity, motorAppliedVolts, motorCurrent, setPointError, rollerPosition);
 
     inputs.motorVelocityRotationsPerSec = motorVelocity.getValueAsDouble();
     inputs.mechanismVelocityRotationsPerSec = inputs.motorVelocityRotationsPerSec * gearRatio;

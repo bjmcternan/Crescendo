@@ -11,8 +11,8 @@ public class Amp extends SubsystemBase {
 
   public Amp() {
     // compressor = new Compressor(20, PneumaticsModuleType.REVPH);
-    elbowSolenoid = new Solenoid(20, PneumaticsModuleType.REVPH, 2);
-    wristSolenoid = new Solenoid(20, PneumaticsModuleType.REVPH, 3);
+    elbowSolenoid = new Solenoid(20, PneumaticsModuleType.REVPH, 7);
+    wristSolenoid = new Solenoid(20, PneumaticsModuleType.REVPH, 8);
     // compressor.enableAnalog(110, 120);
   }
 

@@ -199,7 +199,7 @@ public class RobotContainer {
 
     /* Amp scoring control */
     operatorController
-        .leftBumper()
+        .a()
         .onTrue(
             Commands.runOnce(
                 () -> new AmpScore(intake, launcher, amp).schedule(), intake, launcher, amp));
