@@ -13,8 +13,8 @@ public class LauncherIOTalonFX implements LauncherIO {
   public final TalonFX motor;
 
   private final StatusSignal<Double> motorVelocity;
-  private final StatusSignal<Double> motorAppliedVolts;
-  private final StatusSignal<Double> motorCurrent;
+  // private final StatusSignal<Double> motorAppliedVolts;
+  // private final StatusSignal<Double> motorCurrent;
   private final StatusSignal<Double> setPointError;
 
   private double setPoint = 0.0d;
@@ -24,7 +24,7 @@ public class LauncherIOTalonFX implements LauncherIO {
   private static VelocityVoltage velocityVoltageCommand = new VelocityVoltage(0.0).withSlot(0);
 
   public LauncherIOTalonFX(int canId) {
-    this.motor = new TalonFX(canId, "rio");
+    this.motor = new TalonFX(canId);
     TalonFXConfiguration config = new TalonFXConfiguration();
 
     // Plastic gear config
@@ -38,8 +38,8 @@ public class LauncherIOTalonFX implements LauncherIO {
     config.Slot0.kP = 0.3;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0.0;
-    config.Slot0.kV = 0.147;
-    config.Slot0.kS = 0.3;
+    config.Slot0.kV = 0.253;
+    config.Slot0.kS = 0.69;
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -48,18 +48,24 @@ public class LauncherIOTalonFX implements LauncherIO {
     motor.getConfigurator().apply(config);
 
     motorVelocity = motor.getVelocity();
-    motorAppliedVolts = motor.getMotorVoltage();
-    motorCurrent = motor.getStatorCurrent();
+    // motorAppliedVolts = motor.getMotorVoltage();
+    // motorCurrent = motor.getStatorCurrent();
     setPointError = motor.getClosedLoopError();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50, motorVelocity, motorAppliedVolts, motorCurrent, setPointError);
+        50,
+        motorVelocity,
+        // motorAppliedVolts, motorCurrent,
+        setPointError);
     motor.optimizeBusUtilization();
   }
 
   @Override
   public void updateInputs(LauncherIOInputs inputs) {
-    BaseStatusSignal.refreshAll(motorVelocity, motorAppliedVolts, motorCurrent, setPointError);
+    BaseStatusSignal.refreshAll(
+        motorVelocity,
+        // motorAppliedVolts, motorCurrent,
+        setPointError);
 
     inputs.motorVelocityRotationsPerSec = motorVelocity.getValueAsDouble();
     inputs.mechanismVelocityRotationsPerSec = inputs.motorVelocityRotationsPerSec * gearRatio;
