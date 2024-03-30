@@ -9,7 +9,8 @@ public class Launcher extends SubsystemBase {
 
   private final LauncherIOTalonFX launchMotor;
   private final LauncherIOInputsAutoLogged launchMotorInputs = new LauncherIOInputsAutoLogged();
-  private final ColorSensorIOInputsAutoLogged rightSightSensorInputs = new ColorSensorIOInputsAutoLogged();
+  private final ColorSensorIOInputsAutoLogged rightSightSensorInputs =
+      new ColorSensorIOInputsAutoLogged();
   private final RiteSightSensor proximitySensorIO;
 
   public Launcher() {
