@@ -9,8 +9,7 @@ public class Launcher extends SubsystemBase {
 
   private final LauncherIOTalonFX launchMotor;
   private final LauncherIOInputsAutoLogged launchMotorInputs = new LauncherIOInputsAutoLogged();
-  private final ColorSensorIOInputsAutoLogged rightSightSensorInputs =
-      new ColorSensorIOInputsAutoLogged();
+  private final ColorSensorIOInputsAutoLogged rightSightSensorInputs = new ColorSensorIOInputsAutoLogged();
   private final RiteSightSensor proximitySensorIO;
 
   public Launcher() {
@@ -60,5 +59,9 @@ public class Launcher extends SubsystemBase {
 
   public double detectedNoteForSeconds() {
     return rightSightSensorInputs.detectedForSeconds;
+  }
+
+  public double getPosition() {
+    return launchMotorInputs.rollerPosition;
   }
 }

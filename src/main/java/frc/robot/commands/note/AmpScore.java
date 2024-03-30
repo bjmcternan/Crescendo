@@ -9,14 +9,14 @@ import frc.robot.subsystems.launcher.Launcher;
 public class AmpScore extends Command {
   private static double LAUNCHER_STARTING_SPEED = 10.0;
   private static double LAUNCHER_POSITIONING_SPEED = 5.0;
-  // private static double TARGET_ = 5.0;
 
-  private static double POS_FOR_TIME = 0.5;
+  private static double POS_ROTATIONS = 1.5;
+
+  private double startPosition = 0.0;
 
   // state variables
   private boolean complete = false;
 
-  private Timer endBuffer = new Timer();
   private Timer positioningTime = new Timer();
 
   // subsystems
@@ -26,6 +26,7 @@ public class AmpScore extends Command {
 
   private enum State {
     SPIN_UP,
+    FEED,
     LOAD,
     GRAB,
     POSITION,
@@ -62,17 +63,33 @@ public class AmpScore extends Command {
         launcher.setVelocity(LAUNCHER_STARTING_SPEED);
 
         if (launcher.getVelocityRPS() > LAUNCHER_STARTING_SPEED - 0.5) {
-          state = State.LOAD;
+          state = State.FEED;
           positioningTime.start();
         }
         break;
-      case LOAD:
+      case FEED:
         intake.setVelocity(20.0);
-        if (positioningTime.hasElapsed(POS_FOR_TIME)) {
-          state = State.GRAB;
-          launcher.disableLauncher();
+        // if the note doesnt enter the launcher within 1 second then we end the command
+        if (positioningTime.hasElapsed(1.0)) {
+          complete = true;
+          break;
+        }
+
+        // wait for the note to enter the launcher
+        if (launcher.getVelocityRPS() < LAUNCHER_STARTING_SPEED - 0.5) {
+          state = State.LOAD;
           intake.disableIntake();
+          startPosition = launcher.getPosition();
           positioningTime.restart();
+        }
+        break;
+      case LOAD:
+        launcher.setVelocity(LAUNCHER_POSITIONING_SPEED);
+        // run the launcher until it has spun at least 1.5 rotations
+        if (launcher.getPosition() - startPosition > POS_ROTATIONS) {
+          state = State.GRAB;
+          positioningTime.restart();
+          launcher.disableLauncher();
         }
         break;
       case GRAB:
