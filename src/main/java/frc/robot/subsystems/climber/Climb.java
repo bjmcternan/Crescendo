@@ -13,6 +13,7 @@ public class Climb extends SubsystemBase {
   public Climb() {
     compressor = new Compressor(20, PneumaticsModuleType.REVPH);
     climbSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 0, 1);
+    // climbSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 2, 3);
     compressor.enableAnalog(110, 120);
   }
 
@@ -24,14 +25,14 @@ public class Climb extends SubsystemBase {
 
   // Put methods for controlling this subsystem here. Call these from Commands.
   public void climberDown() {
-    climbSolenoid.set(DoubleSolenoid.Value.kReverse);
-  }
-
-  public void climberUp() {
     climbSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
-  public void stop() {
-    climbSolenoid.set(DoubleSolenoid.Value.kOff);
+  public void climberUp() {
+    climbSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
+
+  // public void stop() {
+  //   climbSolenoid.set(DoubleSolenoid.Value.kOff);
+  // }
 }

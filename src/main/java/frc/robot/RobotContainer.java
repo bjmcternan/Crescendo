@@ -172,10 +172,16 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> drive.resetRotation(0.0), drive).ignoringDisable(true));
 
     /* climb */
-    operatorController.b().whileTrue(Commands.runOnce(climber::climberUp));
-    operatorController.y().whileTrue(Commands.runOnce(climber::climberDown));
-    operatorController.y().whileFalse(Commands.runOnce(climber::stop));
-    operatorController.b().whileFalse(Commands.runOnce(climber::stop));
+    operatorController.b().onTrue(Commands.runOnce(climber::climberUp));
+    operatorController.b().onFalse(Commands.runOnce(climber::climberDown));
+
+    /* elbow */
+    operatorController.x().onTrue(Commands.runOnce(amp::activateElbow));
+    operatorController.x().onFalse(Commands.runOnce(amp::deactivateElbow));
+
+    /* wrist */
+    operatorController.y().onTrue(Commands.runOnce(amp::closeWrist));
+    operatorController.y().onFalse(Commands.runOnce(amp::openWrist));
 
     /* Reset heading command */
     driverController

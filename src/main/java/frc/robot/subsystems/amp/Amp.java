@@ -24,11 +24,11 @@ public class Amp extends SubsystemBase {
   }
 
   public void closeWrist() {
-    wristSolenoid.set(DoubleSolenoid.Value.kForward);
+    wristSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void openWrist() {
-    wristSolenoid.set(DoubleSolenoid.Value.kReverse);
+    wristSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
   public void activateElbow() {
