@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6807503073695607,
-      "y": 6.642279723305886
+      "x": 0.7336934388833163,
+      "y": 4.4361399886695265
     },
-    "rotation": -120.0
+    "rotation": 119.89890183861462
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "launchNote"
-          }
-        },
         {
           "type": "race",
           "data": {
@@ -24,7 +18,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp Center - blue"
+                  "pathName": "Podium Center - blue"
                 }
               },
               {
@@ -39,7 +33,7 @@
         {
           "type": "named",
           "data": {
-            "name": "launchNote2"
+            "name": "launchNote"
           }
         },
         {
@@ -64,7 +58,7 @@
         {
           "type": "named",
           "data": {
-            "name": "launchNote3"
+            "name": "launchNote2"
           }
         },
         {
@@ -74,13 +68,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "side-CENTER BOTTOM"
+                  "pathName": "CENTER TOP"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "colorSensorIntake3"
+                  "name": "colorSensorIntake2"
                 }
               }
             ]
@@ -89,12 +83,12 @@
         {
           "type": "named",
           "data": {
-            "name": "launchNote4"
+            "name": "launchNote2"
           }
         }
       ]
     }
   },
-  "folder": "Amp",
+  "folder": "Podium",
   "choreoAuto": false
 }
