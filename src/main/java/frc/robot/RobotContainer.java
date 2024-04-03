@@ -176,8 +176,8 @@ public class RobotContainer {
     // operatorController.b().onFalse(Commands.runOnce(climber::climberDown));
 
     /* elbow */
-    operatorController.x().onFalse(Commands.runOnce(amp::activateElbow));
-    operatorController.x().onTrue(Commands.runOnce(amp::deactivateElbow));
+    operatorController.x().onFalse(Commands.runOnce(amp::deactivateElbow));
+    operatorController.x().onTrue(Commands.runOnce(amp::activateElbow));
 
     /* wrist */
     operatorController.y().onTrue(Commands.runOnce(amp::closeWrist));
