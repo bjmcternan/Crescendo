@@ -111,9 +111,11 @@ public class AmpScore extends Command {
         break;
       case SCORE:
         amp.openWrist();
+
         if (positioningTime.hasElapsed(1.0)) {
-          complete = true;
           amp.deactivateElbow();
+
+          complete = true;
         }
         break;
       default:

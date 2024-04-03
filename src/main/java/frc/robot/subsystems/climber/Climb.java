@@ -2,6 +2,7 @@ package frc.robot.subsystems.climber;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -9,11 +10,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climb extends SubsystemBase {
   private DoubleSolenoid climbSolenoid;
   private Compressor compressor;
+  private PneumaticHub hub;
 
   public Climb() {
+    hub = new PneumaticHub(20);
+
     compressor = new Compressor(20, PneumaticsModuleType.REVPH);
-    climbSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 0, 1);
-    // climbSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 2, 3);
+    // climbSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 4, 5);
+    // climbSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 0, 1);
     compressor.enableAnalog(110, 120);
   }
 

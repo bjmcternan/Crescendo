@@ -172,8 +172,8 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> drive.resetRotation(0.0), drive).ignoringDisable(true));
 
     /* climb */
-    operatorController.b().onTrue(Commands.runOnce(climber::climberUp));
-    operatorController.b().onFalse(Commands.runOnce(climber::climberDown));
+    // operatorController.b().onTrue(Commands.runOnce(climber::climberUp));
+    // operatorController.b().onFalse(Commands.runOnce(climber::climberDown));
 
     /* elbow */
     operatorController.x().onFalse(Commands.runOnce(amp::activateElbow));

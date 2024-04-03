@@ -12,7 +12,7 @@ public class Amp extends SubsystemBase {
   public Amp() {
     // compressor = new Compressor(20, PneumaticsModuleType.REVPH);
     wristSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 2, 3);
-    elbowSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 4, 5);
+    elbowSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 0, 1);
     // compressor.enableAnalog(110, 120);
   }
 
@@ -32,11 +32,11 @@ public class Amp extends SubsystemBase {
   }
 
   public void activateElbow() {
-    elbowSolenoid.set(DoubleSolenoid.Value.kForward);
+    elbowSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void deactivateElbow() {
-    elbowSolenoid.set(DoubleSolenoid.Value.kReverse);
+    elbowSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
   public void reset() {
