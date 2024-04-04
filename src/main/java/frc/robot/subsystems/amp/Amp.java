@@ -1,28 +1,16 @@
 package frc.robot.subsystems.amp;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Amp extends SubsystemBase {
   private DoubleSolenoid wristSolenoid;
   private DoubleSolenoid elbowSolenoid;
-  private Compressor compressor;
 
   public Amp() {
-    compressor = new Compressor(20, PneumaticsModuleType.REVPH);
     wristSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 2, 3);
     elbowSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 0, 1);
-    compressor.enableAnalog(95, 105);
-  }
-
-  @Override
-  public void periodic() {
-    // System.out.println(compressor.getConfigType());
-    SmartDashboard.putNumber("Compresser Pressure", compressor.getPressure());
-    // This method will be called once per scheduler run
   }
 
   public void closeWrist() {

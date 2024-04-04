@@ -2,9 +2,11 @@ package frc.robot.commands.note;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.SpikeController;
 import frc.robot.subsystems.amp.Amp;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
+import frc.robot.subsystems.pneumatics.SpikeCompressor;
 
 public class AmpScore extends Command {
   private static double LAUNCHER_STARTING_SPEED = 10.0;
@@ -23,6 +25,9 @@ public class AmpScore extends Command {
   private final Intake intake;
   private final Launcher launcher;
   private final Amp amp;
+  private final SpikeCompressor compressor;
+
+  private SpikeController operatorController;
 
   private enum State {
     SPIN_UP,
@@ -35,10 +40,17 @@ public class AmpScore extends Command {
 
   private State state;
 
-  public AmpScore(Intake intake, Launcher launcher, Amp amp) {
+  public AmpScore(
+      Intake intake,
+      Launcher launcher,
+      Amp amp,
+      SpikeController operatorController,
+      SpikeCompressor compressor) {
     this.intake = intake;
     this.launcher = launcher;
     this.amp = amp;
+    this.operatorController = operatorController;
+    this.compressor = compressor;
 
     addRequirements(intake, launcher);
   }
@@ -49,6 +61,7 @@ public class AmpScore extends Command {
     state = State.SPIN_UP;
     // Reset amp arm position
     amp.reset();
+    compressor.disable();
 
     positioningTime.reset();
     positioningTime.stop();
@@ -92,9 +105,9 @@ public class AmpScore extends Command {
           break;
         }
 
-        launcher.setVelocity(4.0);
+        launcher.setVelocity(6.0);
         // run the launcher until it has spun at least 1.5 rotations
-        if ((launcher.getPosition() - startPosition) > 1.1) {
+        if ((launcher.getPosition() - startPosition) > 0.9) {
           launcher.disableLauncher();
           positioningTime.restart();
           state = State.GRAB;
@@ -110,7 +123,7 @@ public class AmpScore extends Command {
       case POSITION:
         launcher.setVelocity(10.0);
         amp.activateElbow();
-        if (positioningTime.hasElapsed(0.5)) {
+        if (!operatorController.a().getAsBoolean()) {
           state = State.SCORE;
           positioningTime.restart();
           launcher.disableLauncher();
@@ -137,6 +150,7 @@ public class AmpScore extends Command {
     intake.disableIntake();
     launcher.disableLauncher();
     amp.reset();
+    compressor.enable();
   }
 
   // Returns true when the command should end.

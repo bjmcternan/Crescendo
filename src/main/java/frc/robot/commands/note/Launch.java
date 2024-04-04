@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
+import frc.robot.subsystems.pneumatics.SpikeCompressor;
 
 public class Launch extends Command {
   private boolean complete = false;
@@ -14,6 +15,7 @@ public class Launch extends Command {
   // subsystems
   private final Intake intake;
   private final Launcher launcher;
+  private final SpikeCompressor compressor;
 
   private enum State {
     SPIN_UP,
@@ -23,13 +25,14 @@ public class Launch extends Command {
 
   private State state;
 
-  public Launch(Intake intake, Launcher launcher) {
+  public Launch(Intake intake, Launcher launcher, SpikeCompressor compressor) {
     this.intake = intake;
     this.launcher = launcher;
+    this.compressor = compressor;
     state = State.SPIN_UP;
     complete = false;
 
-    addRequirements(intake, launcher);
+    addRequirements(intake, launcher, compressor);
   }
 
   // Called when the command is initially scheduled.
@@ -39,6 +42,8 @@ public class Launch extends Command {
     launcher.setVelocity(40.0);
     totalTime.restart();
     actionTime.reset();
+
+    compressor.disable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -82,6 +87,8 @@ public class Launch extends Command {
     // Stop the launcher
     intake.disableIntake();
     launcher.disableLauncher();
+
+    compressor.enable();
   }
 
   // Returns true when the command should end.

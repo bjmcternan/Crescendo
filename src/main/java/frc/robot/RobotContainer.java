@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.SpikeController;
-import frc.robot.commands.FeedForwardCharacterization;
 import frc.robot.commands.SubsystemControl;
 import frc.robot.commands.note.AmpScore;
 import frc.robot.commands.note.ColorSensorIntake;
@@ -37,6 +36,7 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.leds.Led;
+import frc.robot.subsystems.pneumatics.SpikeCompressor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -53,6 +53,7 @@ public class RobotContainer {
   private final Led led;
   // private final Climb climber;
   private final Amp amp;
+  private final SpikeCompressor compressor;
 
   // Controller
   private static final double DEADBAND = 0.05;
@@ -60,7 +61,7 @@ public class RobotContainer {
   private final SpikeController operatorController = new SpikeController(1, DEADBAND);
 
   // Dashboard inputs
-  private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser2;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -94,18 +95,18 @@ public class RobotContainer {
         break;
     }
     // Initalize subsystems
-    // vision = new Vision();
     launcher = new Launcher();
     intake = new Intake(drive);
     led = new Led(1, launcher);
+    compressor = new SpikeCompressor();
 
-    NamedCommands.registerCommand("launchNote", new Launch(intake, launcher));
+    NamedCommands.registerCommand("launchNote", new Launch(intake, launcher, compressor));
     NamedCommands.registerCommand("colorSensorIntake", new ColorSensorIntake(intake, launcher));
-    NamedCommands.registerCommand("launchNote2", new Launch(intake, launcher));
+    NamedCommands.registerCommand("launchNote2", new Launch(intake, launcher, compressor));
     NamedCommands.registerCommand("colorSensorIntake2", new ColorSensorIntake(intake, launcher));
-    NamedCommands.registerCommand("launchNote3", new Launch(intake, launcher));
+    NamedCommands.registerCommand("launchNote3", new Launch(intake, launcher, compressor));
     NamedCommands.registerCommand("colorSensorIntake3", new ColorSensorIntake(intake, launcher));
-    NamedCommands.registerCommand("launchNote4", new Launch(intake, launcher));
+    NamedCommands.registerCommand("launchNote4", new Launch(intake, launcher, compressor));
     NamedCommands.registerCommand("colorSensorIntake4", new ColorSensorIntake(intake, launcher));
 
     // Initalize climber
@@ -115,14 +116,14 @@ public class RobotContainer {
     amp = new Amp();
 
     // Set up auto routines
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    autoChooser2 = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser Lehigh", autoChooser2);
 
     // Set up feedforward characterization
-    autoChooser.addOption(
-        "Drive FF Characterization",
-        new FeedForwardCharacterization(
-            drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
+    // autoChooser.addOption(
+    //     "Drive FF Characterization",
+    //     new FeedForwardCharacterization(
+    //         drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -202,14 +203,24 @@ public class RobotContainer {
     /* Launcher control */
     operatorController
         .rightBumper()
-        .onTrue(Commands.runOnce(() -> new Launch(intake, launcher).schedule(), intake, launcher));
+        .onTrue(
+            Commands.runOnce(
+                () -> new Launch(intake, launcher, compressor).schedule(),
+                intake,
+                launcher,
+                compressor));
 
     /* Amp scoring control */
     operatorController
         .a()
         .onTrue(
             Commands.runOnce(
-                () -> new AmpScore(intake, launcher, amp).schedule(), intake, launcher, amp));
+                () ->
+                    new AmpScore(intake, launcher, amp, operatorController, compressor).schedule(),
+                intake,
+                launcher,
+                amp,
+                compressor));
   }
 
   /**
@@ -218,6 +229,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return autoChooser2.getSelected();
   }
 }
