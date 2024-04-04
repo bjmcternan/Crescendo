@@ -106,7 +106,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("launchNote3", new Launch(intake, launcher));
     NamedCommands.registerCommand("colorSensorIntake3", new ColorSensorIntake(intake, launcher));
     NamedCommands.registerCommand("launchNote4", new Launch(intake, launcher));
-    NamedCommands.registerCommand("colorSensorIntake", new ColorSensorIntake(intake, launcher));
+    NamedCommands.registerCommand("colorSensorIntake4", new ColorSensorIntake(intake, launcher));
 
     // Initalize climber
     // climber = new Climb();

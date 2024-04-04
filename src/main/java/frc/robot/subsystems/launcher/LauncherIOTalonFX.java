@@ -36,7 +36,7 @@ public class LauncherIOTalonFX implements LauncherIO {
     // config.Slot0.kS = 0.1d;
 
     // Metal gear config
-    config.Slot0.kP = 0.4;
+    config.Slot0.kP = 1.6;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0.0;
     config.Slot0.kV = 0.2;
@@ -44,7 +44,7 @@ public class LauncherIOTalonFX implements LauncherIO {
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    config.CurrentLimits.StatorCurrentLimit = 150.0;
+    config.CurrentLimits.StatorCurrentLimit = 100.0;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     motor.getConfigurator().apply(config);
 

@@ -85,7 +85,7 @@ public class AmpScore extends Command {
         }
         break;
       case LOAD:
-        if (positioningTime.hasElapsed(0.5)) {
+        if (positioningTime.hasElapsed(1.5)) {
           launcher.disableLauncher();
           positioningTime.restart();
           state = State.GRAB;
@@ -108,7 +108,7 @@ public class AmpScore extends Command {
         }
         break;
       case POSITION:
-        launcher.setVelocity(5.0);
+        launcher.setVelocity(10.0);
         amp.activateElbow();
         if (positioningTime.hasElapsed(0.5)) {
           state = State.SCORE;

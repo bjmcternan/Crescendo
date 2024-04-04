@@ -182,7 +182,7 @@ public class SubsystemControl {
               driverController.setRumble(0.0);
               operatorController.setRumble(0.0);
             }
-            if (launcher.detectedNoteForSeconds() < 0.3) {
+            if (launcher.detectedNoteForSeconds() < 0.4) {
               intake.setVelocity(-0.5);
             } else {
               intake.disableIntake();

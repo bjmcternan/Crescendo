@@ -4,32 +4,30 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
-import java.util.function.BooleanSupplier;
 
 public class Launch extends Command {
-  // state variables
-  private boolean feeding = false;
   private boolean complete = false;
 
-  private Timer endBuffer = new Timer();
   private Timer totalTime = new Timer();
+  private Timer actionTime = new Timer();
 
   // subsystems
   private final Intake intake;
   private final Launcher launcher;
 
+  private enum State {
+    SPIN_UP,
+    FEED,
+    FINISH
+  }
+
+  private State state;
+
   public Launch(Intake intake, Launcher launcher) {
     this.intake = intake;
     this.launcher = launcher;
-
-    addRequirements(intake, launcher);
-  }
-
-  public Launch(Intake intake, Launcher launcher, BooleanSupplier cancelCommand) {
-    this.intake = intake;
-    this.launcher = launcher;
-
-    onlyWhile(cancelCommand);
+    state = State.SPIN_UP;
+    complete = false;
 
     addRequirements(intake, launcher);
   }
@@ -37,32 +35,44 @@ public class Launch extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Disable the intake`
     intake.disableIntake();
-    // Enable the launcher
-    launcher.enableLauncher();
-    totalTime.reset();
-    totalTime.start();
+    launcher.setVelocity(40.0);
+    totalTime.restart();
+    actionTime.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Check if launcher is spun up
-    if (feeding) {
-      if (!launcher.isReadyToShoot()) {
+    switch (state) {
+      case SPIN_UP:
+        if (launcher.isReadyToShoot()) {
+          state = State.FEED;
+          actionTime.restart();
+        }
+
+        break;
+      case FEED:
+        intake.setVelocity(30.0);
+
+        if (!launcher.isReadyToShoot()) {
+          state = State.FINISH;
+          actionTime.restart();
+        } else if (actionTime.hasElapsed(1.0)) {
+          complete = true;
+        }
+
+        break;
+      case FINISH:
+        if (actionTime.hasElapsed(0.2)) {
+          complete = true;
+        }
+
+        break;
+      default:
         complete = true;
-      }
-    }
-
-    if (launcher.isReadyToShoot() && !feeding) {
-      intake.setVelocity(30.0);
-      feeding = true;
-    }
-
-    if (!complete) {
-      endBuffer.reset();
-      endBuffer.start();
+        System.out.println("Incorrectly set state for Launch command");
+        break;
     }
   }
 
@@ -77,6 +87,6 @@ public class Launch extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return endBuffer.hasElapsed(0.2) || totalTime.hasElapsed(2.5);
+    return complete || totalTime.hasElapsed(50.0);
   }
 }
