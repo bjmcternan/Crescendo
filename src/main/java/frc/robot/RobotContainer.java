@@ -25,8 +25,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.SpikeController;
 import frc.robot.commands.FeedForwardCharacterization;
 import frc.robot.commands.SubsystemControl;
+import frc.robot.commands.note.AmpScore;
 import frc.robot.commands.note.ColorSensorIntake;
 import frc.robot.commands.note.Launch;
+import frc.robot.subsystems.amp.Amp;
+import frc.robot.subsystems.climber.Climb;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -49,6 +52,8 @@ public class RobotContainer {
   // private final Vision vision;
   private final Intake intake;
   private final Led led;
+  private final Climb climber;
+  private final Amp amp;
 
   // Controller
   private static final double DEADBAND = 0.05;
@@ -105,6 +110,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("colorSensorIntake", new ColorSensorIntake(intake, launcher));
 
     // Initalize climber
+    climber = new Climb();
+
+    // Initialize amp
+    amp = new Amp();
 
     // Set up auto routines
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -134,25 +143,26 @@ public class RobotContainer {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-    /*SubsystemControl.fieldOrientedRotation(
-                drive,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () -> {
-                  Rotation2d rot =
-                      new Rotation2d(driverController.getRightX(), driverController.getRightY());
-                  double magnitude =
-                      Math.hypot(driverController.getRightX(), driverController.getRightY());
-
-                  if (magnitude > 0.5) {
-                    return (-rot.getDegrees() + 90) % 360;
-                  } else {
-                    return -1;
-                  }
-                },
-                () -> driverController.getLeftTriggerAxis(),
-                () -> driverController.getRightTriggerAxis()));
-    */
+    /*
+     * SubsystemControl.fieldOrientedRotation(
+     * drive,
+     * () -> -driverController.getLeftY(),
+     * () -> -driverController.getLeftX(),
+     * () -> {
+     * Rotation2d rot =
+     * new Rotation2d(driverController.getRightX(), driverController.getRightY());
+     * double magnitude =
+     * Math.hypot(driverController.getRightX(), driverController.getRightY());
+     *
+     * if (magnitude > 0.5) {
+     * return (-rot.getDegrees() + 90) % 360;
+     * } else {
+     * return -1;
+     * }
+     * },
+     * () -> driverController.getLeftTriggerAxis(),
+     * () -> driverController.getRightTriggerAxis()));
+     */
     /* Brake command */
     driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
@@ -160,7 +170,18 @@ public class RobotContainer {
     driverController
         .y()
         .onTrue(Commands.runOnce(() -> drive.resetRotation(0.0), drive).ignoringDisable(true));
-    ;
+
+    /* climb */
+    // operatorController.b().onTrue(Commands.runOnce(climber::climberUp));
+    // operatorController.b().onFalse(Commands.runOnce(climber::climberDown));
+
+    /* elbow */
+    operatorController.x().onFalse(Commands.runOnce(amp::deactivateElbow));
+    operatorController.x().onTrue(Commands.runOnce(amp::activateElbow));
+
+    /* wrist */
+    operatorController.y().onTrue(Commands.runOnce(amp::closeWrist));
+    operatorController.y().onFalse(Commands.runOnce(amp::openWrist));
 
     /* Reset heading command */
     driverController
@@ -181,6 +202,13 @@ public class RobotContainer {
     operatorController
         .rightBumper()
         .onTrue(Commands.runOnce(() -> new Launch(intake, launcher).schedule(), intake, launcher));
+
+    /* Amp scoring control */
+    operatorController
+        .a()
+        .onTrue(
+            Commands.runOnce(
+                () -> new AmpScore(intake, launcher, amp).schedule(), intake, launcher, amp));
   }
 
   /**

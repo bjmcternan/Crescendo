@@ -61,4 +61,8 @@ public class Launcher extends SubsystemBase {
   public double detectedNoteForSeconds() {
     return rightSightSensorInputs.detectedForSeconds;
   }
+
+  public double getPosition() {
+    return launchMotorInputs.rollerPosition;
+  }
 }
