@@ -36,7 +36,7 @@ public class LauncherIOTalonFX implements LauncherIO {
     // config.Slot0.kS = 0.1d;
 
     // Metal gear config
-    config.Slot0.kP = 1.6;
+    config.Slot0.kP = 2;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0.0;
     config.Slot0.kV = 0.2;
