@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6807503073695607,
-      "y": 6.642279723305886
+      "x": 1.3101396499822704,
+      "y": 5.537510149873118
     },
-    "rotation": -120.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -22,15 +22,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Amp Center - red"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "colorSensorIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Center"
                 }
               }
             ]
@@ -47,15 +47,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Center Center"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "colorSensorIntake2"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Red - Center Podium"
                 }
               }
             ]
@@ -66,35 +66,10 @@
           "data": {
             "name": "launchNote3"
           }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "CENTER BOTTOM"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "colorSensorIntake3"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "launchNote4"
-          }
         }
       ]
     }
   },
-  "folder": "Amp",
+  "folder": "Center",
   "choreoAuto": false
 }
