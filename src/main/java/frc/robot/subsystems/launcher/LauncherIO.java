@@ -8,8 +8,8 @@ public interface LauncherIO {
     public double motorVelocityRotationsPerSec = 0.0d;
     public double mechanismVelocityRotationsPerSec = 0.0d;
     public double rollerPosition = 0.0d;
-    // public double motorAppliedVolts = 0.0d;
-    // public double motorCurrentAmps = 0.0d;
+    public double motorAppliedVolts = 0.0d;
+    public double motorCurrentAmps = 0.0d;
     public double setPoint = 0.0d;
     // public double setPointError = 0.0d;
   }

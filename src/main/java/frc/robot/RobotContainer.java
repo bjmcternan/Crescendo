@@ -29,7 +29,6 @@ import frc.robot.commands.note.AmpScore;
 import frc.robot.commands.note.ColorSensorIntake;
 import frc.robot.commands.note.Launch;
 import frc.robot.subsystems.amp.Amp;
-import frc.robot.subsystems.climber.Climb;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -52,7 +51,7 @@ public class RobotContainer {
   // private final Vision vision;
   private final Intake intake;
   private final Led led;
-  private final Climb climber;
+  // private final Climb climber;
   private final Amp amp;
 
   // Controller
@@ -110,7 +109,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("colorSensorIntake", new ColorSensorIntake(intake, launcher));
 
     // Initalize climber
-    climber = new Climb();
+    // climber = new Climb();
 
     // Initialize amp
     amp = new Amp();

@@ -13,8 +13,8 @@ public class LauncherIOTalonFX implements LauncherIO {
   public final TalonFX motor;
 
   private final StatusSignal<Double> motorVelocity;
-  // private final StatusSignal<Double> motorAppliedVolts;
-  // private final StatusSignal<Double> motorCurrent;
+  private final StatusSignal<Double> motorAppliedVolts;
+  private final StatusSignal<Double> motorCurrent;
   private final StatusSignal<Double> setPointError;
   private final StatusSignal<Double> rollerPosition;
 
@@ -36,39 +36,41 @@ public class LauncherIOTalonFX implements LauncherIO {
     // config.Slot0.kS = 0.1d;
 
     // Metal gear config
-    config.Slot0.kP = 0.3;
+    config.Slot0.kP = 0.4;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0.0;
-    config.Slot0.kV = 0.253;
-    config.Slot0.kS = 0.69;
+    config.Slot0.kV = 0.2;
+    config.Slot0.kS = 0.708;
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    config.CurrentLimits.StatorCurrentLimit = 100.0;
+    config.CurrentLimits.StatorCurrentLimit = 150.0;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     motor.getConfigurator().apply(config);
 
     motor.setPosition(0.0);
 
     motorVelocity = motor.getVelocity();
-    // motorAppliedVolts = motor.getMotorVoltage();
-    // motorCurrent = motor.getStatorCurrent();
+    motorAppliedVolts = motor.getMotorVoltage();
+    motorCurrent = motor.getStatorCurrent();
     setPointError = motor.getClosedLoopError();
     rollerPosition = motor.getPosition();
 
-    BaseStatusSignal.setUpdateFrequencyForAll(50, motorVelocity, setPointError, rollerPosition);
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        50, motorVelocity, setPointError, rollerPosition, motorCurrent, motorAppliedVolts);
     motor.optimizeBusUtilization();
   }
 
   @Override
   public void updateInputs(LauncherIOInputs inputs) {
-    BaseStatusSignal.refreshAll(motorVelocity, setPointError, rollerPosition);
+    BaseStatusSignal.refreshAll(
+        motorVelocity, setPointError, rollerPosition, motorCurrent, motorAppliedVolts);
 
     inputs.motorVelocityRotationsPerSec = motorVelocity.getValueAsDouble();
     inputs.mechanismVelocityRotationsPerSec = inputs.motorVelocityRotationsPerSec * gearRatio;
     inputs.rollerPosition = rollerPosition.getValueAsDouble();
-    // inputs.motorAppliedVolts = motorAppliedVolts.getValueAsDouble();
-    // inputs.motorCurrentAmps = motorCurrent.getValueAsDouble();
+    inputs.motorAppliedVolts = motorAppliedVolts.getValueAsDouble();
+    inputs.motorCurrentAmps = motorCurrent.getValueAsDouble();
     // inputs.setPointError = setPointError.getValueAsDouble();
     inputs.setPoint = setPoint;
   }

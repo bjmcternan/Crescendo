@@ -175,8 +175,13 @@ public class SubsystemControl {
 
           // If the color sensor senses a note, disable the intake
           if (launcher.isNoteDetected()) {
-            driverController.setRumble(1.0);
-            operatorController.setRumble(1.0);
+            if (launcher.detectedNoteForSeconds() < 1.0) {
+              driverController.setRumble(.7);
+              operatorController.setRumble(.7);
+            } else {
+              driverController.setRumble(0.0);
+              operatorController.setRumble(0.0);
+            }
             if (launcher.detectedNoteForSeconds() < 0.3) {
               intake.setVelocity(-0.5);
             } else {
@@ -188,6 +193,8 @@ public class SubsystemControl {
               }
             }
           } else {
+            driverController.setRumble(0.0);
+            operatorController.setRumble(0.0);
             intake.enableIntake();
             launcher.disableLauncher();
           }
