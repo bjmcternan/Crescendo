@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.lib.SpikeController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
@@ -153,9 +154,12 @@ public class SubsystemControl {
       Launcher launcher,
       DoubleSupplier reverseIntake,
       DoubleSupplier forwardIntake,
-      BooleanSupplier runLauncher) {
+      BooleanSupplier runLauncher,
+      SpikeController driverController,
+      SpikeController operatorController) {
     return Commands.run(
         () -> {
+
           // manual control
           if (reverseIntake.getAsDouble() > 0.1) {
             intake.setVelocity(-10.0 * reverseIntake.getAsDouble());
@@ -171,6 +175,8 @@ public class SubsystemControl {
 
           // If the color sensor senses a note, disable the intake
           if (launcher.isNoteDetected()) {
+            driverController.setRumble(1.0);
+            operatorController.setRumble(1.0);
             if (launcher.detectedNoteForSeconds() < 0.3) {
               intake.setVelocity(-0.5);
             } else {

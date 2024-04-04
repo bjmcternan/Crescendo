@@ -1,6 +1,7 @@
 package frc.lib;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SpikeController extends CommandXboxController {
@@ -9,6 +10,10 @@ public class SpikeController extends CommandXboxController {
   public SpikeController(int port, double deadband) {
     super(port);
     this.deadband = deadband;
+  }
+
+  public void setRumble(double rumbleAmount) {
+    this.getHID().setRumble(RumbleType.kBothRumble, rumbleAmount);
   }
 
   private double deadband(double input) {

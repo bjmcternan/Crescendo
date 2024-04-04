@@ -196,7 +196,9 @@ public class RobotContainer {
             launcher,
             operatorController::getLeftTriggerAxis,
             operatorController::getRightTriggerAxis,
-            () -> operatorController.leftBumper().getAsBoolean()));
+            () -> operatorController.leftBumper().getAsBoolean(),
+            driverController,
+            operatorController));
 
     /* Launcher control */
     operatorController
