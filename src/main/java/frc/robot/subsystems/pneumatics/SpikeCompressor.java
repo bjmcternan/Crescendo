@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class SpikeCompressor extends SubsystemBase {
   private Compressor compressor;
 
-  private static final double MIN_PRESSURE = 80;
+  private static final double MIN_PRESSURE = 60;
   private static final double MAX_PRESSURE = 100;
 
   public SpikeCompressor() {
