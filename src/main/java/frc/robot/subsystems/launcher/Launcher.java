@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Launcher extends SubsystemBase {
   private static final int LAUNCHER_MOTOR_ID = 13;
   private static final double LAUNCHER_SET_SPEED = 41.0;
-  private static final double LAUNCHER_READY_THRESHOLD = 2.0;
+  private static final double LAUNCHER_READY_THRESHOLD = 0.0;
 
   private final LauncherIOTalonFX launchMotor;
   private final LauncherIOInputsAutoLogged launchMotorInputs = new LauncherIOInputsAutoLogged();
