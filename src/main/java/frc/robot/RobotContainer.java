@@ -221,8 +221,8 @@ public class RobotContainer {
                 launcher,
                 amp,
                 compressor));
-                
-    // manually enable/disable the compressor 
+
+    // manually enable/disable the compressor
     // operatorController.leftStick().onTrue(Commands.runOnce(compressor::enable, compressor));
     // operatorController.rightStick().onTrue(Commands.runOnce(compressor::disable, compressor));
   }

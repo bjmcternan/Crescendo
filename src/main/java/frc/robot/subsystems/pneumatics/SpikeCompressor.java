@@ -19,6 +19,7 @@ public class SpikeCompressor extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Compressor Pressure", getPressure());
+    // SmartDashboard.putBoolean("Compressor Enabled", compressor.isEnabled());
   }
 
   public void enable() {

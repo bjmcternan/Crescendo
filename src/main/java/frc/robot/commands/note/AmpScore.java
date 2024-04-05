@@ -70,6 +70,8 @@ public class AmpScore extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    compressor.disable();
+
     switch (this.state) {
       case SPIN_UP:
         intake.disableIntake();

@@ -49,6 +49,8 @@ public class Launch extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    compressor.disable();
+
     switch (state) {
       case SPIN_UP:
         if (launcher.isReadyToShoot()) {
