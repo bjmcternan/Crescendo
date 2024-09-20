@@ -36,7 +36,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Drive extends SubsystemBase {
-  private static final double MAX_LINEAR_SPEED = Units.feetToMeters(14.5);
+  private static final double MAX_LINEAR_SPEED =
+      Units.feetToMeters(7.0); // reset to 14.5 for competitions
   private static final double TRACK_WIDTH_X = Units.inchesToMeters(21.73);
   private static final double TRACK_WIDTH_Y = Units.inchesToMeters(21.73);
   private static final double DRIVE_BASE_RADIUS =

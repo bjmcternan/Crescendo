@@ -100,14 +100,14 @@ public class AmpScore extends Command {
         }
         break;
       case LOAD:
-        if (positioningTime.hasElapsed(1.5)) {
+        if (positioningTime.hasElapsed(1.75)) {
           launcher.disableLauncher();
           positioningTime.restart();
           state = State.GRAB;
           break;
         }
 
-        launcher.setVelocity(6.0);
+        launcher.setVelocity(6.5);
         // run the launcher until it has spun at least 1.5 rotations
         if ((launcher.getPosition() - startPosition) > 0.9) {
           launcher.disableLauncher();
@@ -123,7 +123,7 @@ public class AmpScore extends Command {
         }
         break;
       case POSITION:
-        launcher.setVelocity(10.0);
+        launcher.setVelocity(12.0);
         amp.activateElbow();
         if (!operatorController.a().getAsBoolean()) {
           state = State.SCORE;
@@ -133,7 +133,7 @@ public class AmpScore extends Command {
         }
         break;
       case SCORE:
-        if (positioningTime.hasElapsed(0.3)) {
+        if (positioningTime.hasElapsed(0.2)) {
           amp.deactivateElbow();
 
           complete = true;
